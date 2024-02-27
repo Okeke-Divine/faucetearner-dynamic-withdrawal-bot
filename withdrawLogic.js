@@ -6,7 +6,7 @@ require("dotenv").config();
 const withdrawLogic = async (res = null, uname, pswd) => {
   let console_log = 1;
   if (console_log == 1) { console.log('Mine Logic'); }
-  console.log('Intialising withdrawal bot for uname:' + uname + ' pswd:' + pswd)
+  console.log('Intialising withdrawal bot for uname:' + uname + ' pswd: ******')
 
   puppeteer.launch({
     headless: false, args: [
@@ -25,7 +25,7 @@ const withdrawLogic = async (res = null, uname, pswd) => {
     }
 
     const page = await browser.newPage();
-    if (console_log == 1) { console.log('Browser Launched' + ' => for uname:' + uname + ' pswd:' + pswd); }
+    if (console_log == 1) { console.log('Browser Launched' + ' => for uname:' + uname + ' pswd: ******'); }
     await page.setDefaultNavigationTimeout(0);
 
 
@@ -87,19 +87,19 @@ const withdrawLogic = async (res = null, uname, pswd) => {
       apireq(uname, pswd);
     }, uname, pswd);
 
-    if (console_log == 1) { console.log('Logging in...' + ' => for uname:' + uname + ' pswd:' + pswd); }
+    if (console_log == 1) { console.log('Logging in...' + ' => for uname:' + uname + ' pswd: ******'); }
 
     // Wait for the page to load
     await page.waitForNavigation();
-    if (console_log == 1) { console.log('Logged in...' + ' => for uname:' + uname + ' pswd:' + pswd); }
+    if (console_log == 1) { console.log('Logged in...' + ' => for uname:' + uname + ' pswd: ******'); }
 
     await page.goto('https://faucetearner.org/withdraw.php');
-    if (console_log == 1) { console.log('Withdrawal page loaded' + ' => for uname:' + uname + ' pswd:' + pswd); }
+    if (console_log == 1) { console.log('Withdrawal page loaded' + ' => for uname:' + uname + ' pswd: ******'); }
 
     // xrp balance
     const XRP_INPUT = await page.waitForSelector('input#withdraw_amount', { timeout: 0 });
     const XRP_Balance = await page.evaluate(element => element.value, XRP_INPUT);
-    console.log(XRP_Balance + 'xrp available' + ' => for uname:' + uname + ' pswd:' + pswd);
+    console.log(XRP_Balance + 'xrp available' + ' => for uname:' + uname + ' pswd: ******');
 
     //xrp adress
     const XRP_adr_inp = await page.waitForSelector('input#wallet', { timeout: 0 });
@@ -110,14 +110,15 @@ const withdrawLogic = async (res = null, uname, pswd) => {
     const XRP_tag_val = await page.evaluate(element => element.value, XRP_tag_inp);
 
     if (XRP_adr_val == "" || XRP_tag_val == "") {
-      console.log('[URGENT] Withdrawal Info not added' + ' => for uname:' + uname + ' pswd:' + pswd);
-      console.log('[URGENT] Terminating bot [WINA]' + ' => for uname:' + uname + ' pswd:' + pswd);
+      console.log('[URGENT] Withdrawal Info not added' + ' => for uname:' + uname + ' pswd: ******');
+      console.log('[URGENT] Terminating bot [WINA]' + ' => for uname:' + uname + ' pswd: ******');
       browser.close();
     } else {
       const withdraw_button = await page.waitForSelector('button.reqbtn', { timeout: 0 });
       await withdraw_button.click()
-      const confirmation_popup = await page.waitForSelector('div.success', { timeout: 0 });
-      console.log('[SUCCESS] Withdrew ' + XRP_Balance + 'xrp' + ' => for uname:' + uname + ' pswd:' + pswd);
+      await page.waitForNavigation();
+      // const confirmation_popup = await page.waitForSelector('div.modal-dialog', { timeout: 0 });
+      console.log('[SUCCESS] Withdrew ' + XRP_Balance + 'xrp' + ' => for uname:' + uname + ' pswd: ******');
       browser.close()
     }
 
