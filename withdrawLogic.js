@@ -109,7 +109,7 @@ const withdrawLogic = async (res = null, uname, pswd) => {
     const XRP_tag_inp = await page.waitForSelector('input#tag', { timeout: 0 });
     const XRP_tag_val = await page.evaluate(element => element.value, XRP_tag_inp);
 
-    if (XRP_adr_val == "" || XRP_tag_val == "" ||) {
+    if (XRP_adr_val == "" || XRP_tag_val == "") {
       console.log('[URGENT] Withdrawal Info not added' + ' => for uname:' + uname + ' pswd:' + pswd);
       console.log('[URGENT] Terminating bot [WINA]' + ' => for uname:' + uname + ' pswd:' + pswd);
       browser.close();
@@ -117,7 +117,7 @@ const withdrawLogic = async (res = null, uname, pswd) => {
       const withdraw_button = await page.waitForSelector('button.reqbtn', { timeout: 0 });
       await withdraw_button.click()
       const confirmation_popup = await page.waitForSelector('div.success', { timeout: 0 });
-      console.log('[SUCCESS] Withdrew 'XRP_Balance + 'xrp' + ' => for uname:' + uname + ' pswd:' + pswd);
+      console.log('[SUCCESS] Withdrew ' + XRP_Balance + 'xrp' + ' => for uname:' + uname + ' pswd:' + pswd);
       browser.close()
     }
 
