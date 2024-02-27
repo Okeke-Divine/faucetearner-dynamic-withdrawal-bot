@@ -37,7 +37,8 @@ const withdrawLogic = async (res = null, uname, pswd) => {
     await page.setRequestInterception(true);
 
     page.on('request', (req) => {
-      if (req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image' || req.url().includes('hm.js')) {
+      // if (req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image' || req.url().includes('hm.js')) {
+      if (req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image') {
         req.continue();
         // req.abort();
       }
@@ -95,16 +96,30 @@ const withdrawLogic = async (res = null, uname, pswd) => {
     await page.goto('https://faucetearner.org/withdraw.php');
     if (console_log == 1) { console.log('Withdrawal page loaded' + ' => for uname:' + uname + ' pswd:' + pswd); }
 
+    // xrp balance
     const XRP_INPUT = await page.waitForSelector('input#withdraw_amount', { timeout: 0 });
     const XRP_Balance = await page.evaluate(element => element.value, XRP_INPUT);
-    console.log(XRP_Balance);
+    console.log(XRP_Balance + 'xrp available' + ' => for uname:' + uname + ' pswd:' + pswd);
 
-    if (0 == 1) {
+    //xrp adress
+    const XRP_adr_inp = await page.waitForSelector('input#wallet', { timeout: 0 });
+    const XRP_adr_val = await page.evaluate(element => element.value, XRP_adr_inp);
+
+    // xrp tag
+    const XRP_tag_inp = await page.waitForSelector('input#tag', { timeout: 0 });
+    const XRP_tag_val = await page.evaluate(element => element.value, XRP_tag_inp);
+
+    if (XRP_adr_val == "" || XRP_tag_val == "" ||) {
       console.log('[URGENT] Withdrawal Info not added' + ' => for uname:' + uname + ' pswd:' + pswd);
       console.log('[URGENT] Terminating bot [WINA]' + ' => for uname:' + uname + ' pswd:' + pswd);
       browser.close();
+    } else {
+      const withdraw_button = await page.waitForSelector('button.reqbtn', { timeout: 0 });
+      await withdraw_button.click()
+      const confirmation_popup = await page.waitForSelector('div.success', { timeout: 0 });
+      console.log('[SUCCESS] Withdrew 'XRP_Balance + 'xrp' + ' => for uname:' + uname + ' pswd:' + pswd);
+      browser.close()
     }
-
 
   })
 }
