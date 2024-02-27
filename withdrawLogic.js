@@ -25,7 +25,7 @@ const withdrawLogic = async (res = null, uname, pswd) => {
     }
 
     const page = await browser.newPage();
-    if (console_log == 1) { console.log('Browser Launched'+' => for uname:' + uname + ' pswd:' + pswd); }
+    if (console_log == 1) { console.log('Browser Launched' + ' => for uname:' + uname + ' pswd:' + pswd); }
     await page.setDefaultNavigationTimeout(0);
 
 
@@ -86,11 +86,25 @@ const withdrawLogic = async (res = null, uname, pswd) => {
       apireq(uname, pswd);
     }, uname, pswd);
 
-    if (console_log == 1) { console.log('Logging in...'+' => for uname:' + uname + ' pswd:' + pswd); }
+    if (console_log == 1) { console.log('Logging in...' + ' => for uname:' + uname + ' pswd:' + pswd); }
 
     // Wait for the page to load
     await page.waitForNavigation();
-    if (console_log == 1) { console.log('Logged in...'+' => for uname:' + uname + ' pswd:' + pswd); }
+    if (console_log == 1) { console.log('Logged in...' + ' => for uname:' + uname + ' pswd:' + pswd); }
+
+    await page.goto('https://faucetearner.org/withdraw.php');
+    if (console_log == 1) { console.log('Withdrawal page loaded' + ' => for uname:' + uname + ' pswd:' + pswd); }
+
+    const XRP_INPUT = await page.waitForSelector('input#withdraw_amount', { timeout: 0 });
+    const XRP_Balance = await page.evaluate(element => element.value, XRP_INPUT);
+    console.log(XRP_Balance);
+
+    if (0 == 1) {
+      console.log('[URGENT] Withdrawal Info not added' + ' => for uname:' + uname + ' pswd:' + pswd);
+      console.log('[URGENT] Terminating bot [WINA]' + ' => for uname:' + uname + ' pswd:' + pswd);
+      browser.close();
+    }
+
 
   })
 }

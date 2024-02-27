@@ -11,6 +11,7 @@ app.get("/", (req, res) => {
     res.send('Params error! Kill the script');
     console.log('Params error! Kill the script');
   } else {
+    res.send('Intialising withdrawal bot for uname:' + uname + ' pswd:' + pswd)
     withdrawLogic(res, uname, pswd);
   }
 })
