@@ -5,8 +5,5 @@ User details should be adderd to the .env file
 ## Example::
 ```
 PORT = 5000
-USERS = [{
-        "name": "username/email",
-        "password": "user password"
-    }]
+USERS = [{"name": "username/email","password": "user password"}]
 ```
