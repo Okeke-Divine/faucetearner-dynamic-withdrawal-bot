@@ -5,8 +5,8 @@ const dotenv = require("dotenv");
 puppeteer.use(StealthPlugin());
 dotenv.config();
 
-const successNavigationTimeout = 5000
-const headlessValue = process.env.NODE_ENV === "production" ? 'new': false
+const successNavigationTimeout = process.env.NODE_ENV === "production" ? 60000 : 5000
+const headlessValue = process.env.NODE_ENV === "production" ? 'new' : false
 
 const withdrawLogic = async (uname, pswd) => {
     return new Promise(async (resolve, reject) => {
@@ -65,10 +65,10 @@ const withdrawLogic = async (uname, pswd) => {
                                     alert_icon.innerHTML = checkicon;
                                     document.getElementById("modal_alert").style.display = 'block';
                                     alert_ok.addEventListener('click', function () {
-                                        location.href = "faucet.php";
+                                        location.href = "withdraw.php";
                                     });
                                     setTimeout(function () {
-                                        location.href = "faucet.php";
+                                        location.href = "withdraw.php";
                                     }, 2000);
                                 } else {
                                     alert_text.innerHTML = data.message;
@@ -85,12 +85,12 @@ const withdrawLogic = async (uname, pswd) => {
                 apireq(uname, pswd);
             }, uname, pswd);
 
-            if (console_log == 1) { console.log('Logging in...' + ' => for uname:' + uname + ' pswd: ******'); }
+            // if (console_log == 1) { console.log('Logging in...' + ' => for uname:' + uname + ' pswd: ******'); }
 
-            await page.waitForNavigation();
-            if (console_log == 1) { console.log('Logged in...' + ' => for uname:' + uname + ' pswd: ******'); }
+            // await page.waitForNavigation();
+            // if (console_log == 1) { console.log('Logged in...' + ' => for uname:' + uname + ' pswd: ******'); }
 
-            await page.goto('https://faucetearner.org/withdraw.php');
+            // await page.goto('https://faucetearner.org/withdraw.php');
             if (console_log == 1) { console.log('Withdrawal page loaded' + ' => for uname:' + uname + ' pswd: ******'); }
 
             const XRP_INPUT = await page.waitForSelector('input#withdraw_amount', { timeout: 0 });

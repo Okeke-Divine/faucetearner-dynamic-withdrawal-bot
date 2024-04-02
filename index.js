@@ -55,16 +55,8 @@ app.get("/manual-call", (req, res) => {
       if (error.message.includes('Navigation timeout')) {
         console.error(`Navigation timeout occurred for user: ${user.name}`);
         usersStatus.push({ name: user.name, success: false });
-
-        for (const status of usersStatus) {
-          console.log(`${status.name}: ${status.success ? "Success" : "Failed"}`);
-        }
       } else {
         usersStatus.push({ name: user.name, success: false });
-        
-        for (const status of usersStatus) {
-          console.log(`${status.name}: ${status.success ? "Success" : "Failed"}`);
-        }
       }
     }
   }
