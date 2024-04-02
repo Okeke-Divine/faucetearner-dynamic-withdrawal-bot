@@ -5,6 +5,9 @@ const dotenv = require("dotenv");
 puppeteer.use(StealthPlugin());
 dotenv.config();
 
+const successNavigationTimeout = 5000
+const headlessValue = process.env.NODE_ENV === "production" ? 'new': false
+
 const withdrawLogic = async (uname, pswd) => {
     return new Promise(async (resolve, reject) => {
         let console_log = 1;
@@ -13,7 +16,7 @@ const withdrawLogic = async (uname, pswd) => {
 
         try {
             const browser = await puppeteer.launch({
-                headless: false,
+                headless: headlessValue,
                 args: [],
                 executablePath: process.env.NODE_ENV === "production" ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath(),
             });
@@ -37,7 +40,7 @@ const withdrawLogic = async (uname, pswd) => {
 
             page.on('request', (req) => {
                 if (req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image') {
-                    // req.abort();
+                    req.abort();
                 } else {
                     req.continue();
                 }
@@ -107,11 +110,27 @@ const withdrawLogic = async (uname, pswd) => {
                 reject('Withdrawal Info not added');
             } else {
                 const withdraw_button = await page.waitForSelector('button.reqbtn', { timeout: 0 });
-                await withdraw_button.click()
-                await page.waitForNavigation();
-                console.log('[SUCCESS] Withdrew ' + XRP_Balance + 'xrp' + ' => for uname:' + uname + ' pswd: ******');
-                browser.close();
-                resolve(`Withdrawal completed for user: ${uname}`);
+                await withdraw_button.click();
+
+                // Wait for navigation for a maximum of 5 seconds
+                const navigationPromise = page.waitForNavigation({ timeout: successNavigationTimeout });
+
+                // Use Promise.race() to race between navigation promise and a timeout
+                await Promise.race([navigationPromise, new Promise(resolve => setTimeout(resolve, successNavigationTimeout))])
+                    .catch(() => {
+                        console.error('[ERROR] Navigation timeout');
+                    });
+
+                // Check if the navigation was successful
+                if (page.url() === 'your_expected_url_after_navigation') {
+                    console.log('[SUCCESS] Withdrew ' + XRP_Balance + 'xrp' + ' => for uname:' + uname + ' pswd: ******');
+                    browser.close();
+                    resolve(`Withdrawal completed for user: ${uname}`);
+                } else {
+                    console.error('[ERROR] Navigation unsuccessful');
+                    browser.close();
+                    resolve(`Withdrawal had an error for user: ${uname}`);
+                }
             }
         } catch (error) {
             console.error('Error occurred:', error);
