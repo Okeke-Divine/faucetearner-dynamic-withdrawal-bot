@@ -1,2 +1,12 @@
-Dynamic Automation for https://faucetearner.org/ xrp airdrop [Based on URL parameters and an authentication token]
-WARNING!: DO NOT EXPOSE LOGIN DETAILS ON THE CLIENT SIDE
+# Faucet Earner Withdrawal bot
+Withdrawal Automation for https://faucetearner.org/ xrp airdrop (For multiple accounts)
+User details should be adderd to the .env file
+
+## Example::
+```
+PORT = 5000
+USERS = [{
+        "name": "username/email",
+        "password": "user password"
+    }]
+```

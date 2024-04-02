@@ -6,14 +6,14 @@ const app = express()
 const PORT = process.env.PORT || 4000
 
 app.get("/", (req, res) => {
-  const { uname, pswd } = req.query;
-  if (uname == undefined || pswd == undefined) {
-    res.send('Params error! Kill the script');
-    console.log('Params error! Kill the script');
-  } else {
-    res.send('Intialising withdrawal bot for uname:' + uname + ' pswd:' + pswd)
-    withdrawLogic(res, uname, pswd);
-  }
+  // const { uname, pswd } = req.query;
+  // if (uname == undefined || pswd == undefined) {
+  //   res.send('Params error! Kill the script');
+  //   console.log('Params error! Kill the script');
+  // } else {
+  //   res.send('Intialising withdrawal bot for uname:' + uname + ' pswd:' + pswd)
+  //   withdrawLogic(res, uname, pswd);
+  // }
 })
 
 app.listen(PORT, () => {
