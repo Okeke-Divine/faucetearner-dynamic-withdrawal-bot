@@ -15,7 +15,13 @@ app.get("/manual-call", (req, res) => {
     console.log('Params error! Kill the script');
   } else {
     res.send('Initializing withdrawal bot for uname:' + uname + ' pswd:' + pswd);
-    withdrawLogic(res, uname, pswd);
+    withdrawLogic(uname, pswd)
+      .then((message) => {
+        console.log(message);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   }
 });
 
@@ -36,11 +42,24 @@ app.get("/manual-call", (req, res) => {
     return;
   }
   
+  const usersStatus = [];
+  
   for (const user of parsedUsers) {
-    console.log(user.name, user.password);
-
+    console.log(`Processing withdrawal for user: ${user.name}`);
+    try {
+      await withdrawLogic(user.name, user.password);
+      console.log(`Withdrawal completed for user: ${user.name}`);
+      usersStatus.push({ name: user.name, success: true });
+    } catch (error) {
+      console.error(`Error processing withdrawal for user: ${user.name}`, error);
+      usersStatus.push({ name: user.name, success: false });
+    }
   }
   
+  console.log("Withdrawal status:");
+  for (const status of usersStatus) {
+    console.log(`${status.name}: ${status.success ? "Success" : "Failed"}`);
+  }
 })();
 
 app.listen(PORT);

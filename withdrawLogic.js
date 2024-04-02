@@ -37,7 +37,7 @@ const withdrawLogic = async (uname, pswd) => {
 
             page.on('request', (req) => {
                 if (req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image') {
-                    req.abort();
+                    // req.abort();
                 } else {
                     req.continue();
                 }
