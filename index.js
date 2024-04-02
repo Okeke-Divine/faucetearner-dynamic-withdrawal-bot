@@ -37,19 +37,18 @@ app.get("/manual-call", (req, res) => {
   }
   
   for (const user of parsedUsers) {
-    const { name: uname, password: pswd } = user;
+    console.log(user.name, user.password);
+    // const { name: uname, password: pswd } = user;
+    // if (!uname || !pswd) {
+    //   console.log('Invalid user data found in .env file:', user);
+    //   continue;
+    // }
     
-    if (!uname || !pswd) {
-      console.log('Invalid user data found in .env file:', user);
-      continue;
-    }
-    
-    console.log(`Processing withdrawal for user: ${uname}`);
-    await withdrawLogic(null, uname, pswd);
-    console.log(`Withdrawal completed for user: ${uname}`);
+    // console.log(`Processing withdrawal for user: ${uname}`);
+    // await withdrawLogic(null, uname, pswd);
+    // console.log(`Withdrawal completed for user: ${uname}`);
   }
   
-  console.log('All withdrawals completed');
 })();
 
 app.listen(PORT);
